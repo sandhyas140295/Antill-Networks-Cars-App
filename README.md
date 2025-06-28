@@ -1,70 +1,121 @@
-# Getting Started with Create React App
+🚗 Car Buying App – Second-hand Car Marketplace
+This is a web-based application that enables users to browse, request, and book second-hand cars. Admins can manage listings and requests through an admin dashboard.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+🌟 Features
+👤 User
+Login with Google
 
-## Available Scripts
+Browse available cars with search & filter
 
-In the project directory, you can run:
+View car details
 
-### `npm start`
+Submit purchase requests
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+View "My Requests" and booking status
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Book the car once the request is approved
 
-### `npm test`
+🔐 Admin
+Login with Google (admin role detected via Firestore)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Access admin dashboard
 
-### `npm run build`
+View all purchase requests
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Change request status (Pending → Approved/Rejected/Contacted)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+View & manage all bookings (change status to Completed/Cancelled)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+🛠 Tech Stack
+Frontend: React.js (Hooks, Routing)
 
-### `npm run eject`
+Auth: Firebase Authentication (Google Sign-In)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Database: Firebase Firestore
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Storage: Firebase Storage (for car images)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Hosting (optional): Firebase Hosting / Vercel
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+🚀 Working Flow
+🔹 1. Authentication
+User logs in using Google.
 
-## Learn More
+Firebase Auth tracks current user session.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Admin role is fetched from Firestore (roles collection → role: "admin").
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+🔹 2. Car Listings
+Cars are listed from Firestore cars collection.
 
-### Code Splitting
+Users can search by make, model, year, or price.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+🔹 3. Purchase Requests
+When a user is interested in a car, they click "Request to Purchase".
 
-### Analyzing the Bundle Size
+A record is saved in the purchaseRequests collection with user & car info.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+🔹 4. Admin Panel
+Admin views all user requests.
 
-### Making a Progressive Web App
+Admin can update the status:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Pending → Approved, Rejected, or Contacted
 
-### Advanced Configuration
+Once request is approved, the user sees "Book Now" button.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+🔹 5. Booking Flow
+User clicks "Book Now" → creates a record in bookings collection.
 
-### Deployment
+Admin can view all bookings and update status:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Booked → Completed or Cancelled
 
-### `npm run build` fails to minify
+📁 Firebase Collections
+markdown
+Copy
+Edit
+- cars
+  - {id, make, model, year, price, imageUrls[] }
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- purchaseRequests
+  - {id, userId, carId, status, message }
+
+- bookings
+  - {id, userId, carId, status, createdAt }
+
+- roles
+  - {uid: string, role: "admin"}
+⚙️ Setup Instructions
+bash
+Copy
+Edit
+# 1. Clone the repo
+git clone <repo-url>
+cd car-buying-app
+
+# 2. Install dependencies
+npm install
+
+# 3. Add Firebase Config
+# Create a file: src/firebase/config.js
+# and paste your Firebase project credentials
+
+# 4. Run the app
+npm start
+🧪 Sample Admin Setup
+To make someone admin:
+
+Go to Firestore
+
+Create document in roles collection:
+
+Document ID = user UID
+
+Field = role: "admin"
+
+📸 Screenshots
+(Add screenshots of Home, Car Detail, Admin Dashboard, My Requests, etc.)
+
+📌 Final Note
+This project demonstrates full-stack implementation using Firebase and React, covering authentication, CRUD operations, conditional role-based access, and real-time updates.
